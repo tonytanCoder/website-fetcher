@@ -7,6 +7,7 @@ import (
 	"path"
 	"sort"
 	"strings"
+	"crypto/tls"
 )
 
 // 增强URL
@@ -80,6 +81,7 @@ func ParseURL(s, host string) (*URL, error) {
 
 // Get 通过http的get请求url获取Response和是否文本数据（否则是二进制）
 func (this *URL) Get() (resp *http.Response, isText bool, err error) {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	resp, err = http.Get(this.String())
 	if err != nil {
 		return
